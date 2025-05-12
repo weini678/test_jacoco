@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>org.example</groupId>
+    <artifactId>test</artifactId>
+    <version>1.0-SNAPSHOT</version>
+
+    <properties>
+        <maven.compiler.source>17</maven.compiler.source>
+        <maven.compiler.target>17</maven.compiler.target>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    </properties>
+    <dependencies>
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <version>4.13.1</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter</artifactId>
+            <version>RELEASE</version>
+            <scope>test</scope>
+        </dependency>
+    </dependencies>
+
+    <build>
+
+<!--        添加jacoco插件-->
+        <plugins>
+            <plugin>
+                <!-- JaCoCo的 Maven 插件，用于生成代码覆盖率报告 -->
+                <groupId>org.jacoco</groupId>
+                <artifactId>jacoco-maven-plugin</artifactId>
+                <version>0.8.10</version>
+                <executions>
+                <!-- 初始化代码覆盖率代理-->
+                <!-- 第一个任务prepare-agent编译阶段执行，它负责准备 JaCoCo 代理，以便在测试运行时收集覆盖率数据。-->
+                    <execution>
+                        <goals>
+                            <goal>prepare-agent</goal>
+                        </goals>
+                    </execution>
+                    <!-- 第二个任务在 test 阶段执行，目标是 report。这个执行阶段生成代码覆盖率报告-->
+                    <execution>
+                        <id>jacoco-report</id>
+                        <phase>test</phase>
+                        <goals>
+                            <goal>report</goal>
+                        </goals>
+                    </execution>
+                    <!-- 生成报告-->
+                    <execution>
+                        <id>report</id>
+                        <phase>verify</phase>
+                        <goals>
+                            <goal>report</goal>
+                        </goals>
+                    </execution>
+                    <!-- 新增覆盖率检查步骤 -->
+
+                    <execution>
+                        <id>check-coverage</id>
+                        <phase>verify</phase>
+                        <goals>
+                            <goal>check</goal>  <!-- 关键检查目标 -->
+                    </goals>
+                        <!-- 将配置移动到此处 -->
+                    <configuration>
+                        <rules>
+                            <rule>
+                                <!--  <element>BUNDLE</element>   作用域为整个项目 -->
+                                <element>PACKAGE</element> <!-- 作用域为每个包 -->
+                                <limits>
+                                    <limit>
+                                        <counter>LINE</counter>
+<!--                                        COVEREDRATIO &#45;&#45;已覆盖比例   TOTALCOUNT 代码行总数-->
+                                        <value>COVEREDRATIO</value>
+                                        <!--行覆盖率最低80%-->
+                                        <minimum>0.8</minimum>
+                                    </limit>
+                                </limits>
+                            </rule>
+                        </rules>
+                    </configuration>
+                    </execution>
+
+                </executions>
+            </plugin>
+
+        </plugins>
+    </build>
+
+
+</project>
